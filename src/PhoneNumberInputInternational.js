@@ -1,27 +1,37 @@
-import { useState } from 'react';
-import { PhoneInput } from 'react-international-phone';
-import 'react-international-phone/style.css';
+import React, { useState } from 'react';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
-const App = () => {
+const PhoneInputComponent = () => {
   const [phone, setPhone] = useState('');
+  const [isValid, setIsValid] = useState(true);
 
+  const handleOnChange = (value, country) => {
+    setPhone(value);  
+    try {
+      const phoneNumber = parsePhoneNumberFromString(value, country?.countryCode.toUpperCase());
+      if (phoneNumber) {
+        setIsValid(phoneNumber.isValid());
+      } else {
+        setIsValid(false);
+      }
+    } catch (error) {
+      setIsValid(false);
+    }
+  };
+  
   return (
     <div>
-
       <PhoneInput
-        defaultCountry="ua"
         value={phone}
-        onChange={(phone) => setPhone(phone)}
-        forceDialCode
-        
+        isValid={isValid}
+        onChange={handleOnChange}
+        inputStyle={{ width: '100%' }}
       />
-      <button onClick={()=>{
-        const regix = /^\d{9}$/
-          console.log("phone",phone,);
-      }}>
-        click
-      </button>
+      {!isValid && <p style={{ color: 'red' }}>Invalid phone number</p>}
     </div>
   );
 };
-export default App
+
+export default PhoneInputComponent;
