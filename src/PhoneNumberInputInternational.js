@@ -24,10 +24,18 @@ const PhoneInputComponent = () => {
   return (
     <div>
       <PhoneInput
+        country="fr"
         value={phone}
         isValid={isValid}
         onChange={handleOnChange}
         inputStyle={{ width: '100%' }}
+        dropdownStyle={{
+         alignItems:"baseline",
+         display: "flex",
+         alignSelf: "self-end",
+         flexDirection: "column"
+        }}  
+        
       />
       {!isValid && <p style={{ color: 'red' }}>Invalid phone number</p>}
     </div>
